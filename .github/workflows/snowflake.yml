@@ -16,8 +16,6 @@ jobs:
           user: ${{ secrets.SNOWFLAKE_USER }}
           password: ${{ secrets.SNOWFLAKE_PASSWORD }}
           warehouse: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
-          database: ${{ secrets.SNOWFLAKE_DATABASE }}
-          schema: ${{ secrets.SNOWFLAKE_SCHEMA }}
       - name: Create table
         run: |
           snowsql -c ${{ secrets.SNOWFLAKE_CONNECTION }} -f create_table.sql
