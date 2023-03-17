@@ -9,8 +9,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Connect to Snowflake
-        uses: snowflakedb/snowflake-github-actions@v1
         with:
           account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
           user: ${{ secrets.SNOWFLAKE_USER }}
