@@ -36,4 +36,4 @@ jobs:
       # Runs a single command using the runners shell
       - name: Upload artifact to SnowSQL
         run: |
-          ~/bin/snowsql -a $SNOWSQL_ACCOUNT -u SNOWSQL_USER -P $SNOWSQL_PWD  -q 'select 1'
+          ~/bin/snowsql -a $SNOWSQL_ACCOUNT -u $SNOWSQL_USER -P $SNOWSQL_PWD  -q 'select 1'
