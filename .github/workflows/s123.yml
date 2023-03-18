@@ -34,12 +34,9 @@ jobs:
           curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
           SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
       # Runs a single command using the runners shell
-      - name: Upload artifact to SnowSQ
+      - name: Upload artifact to SnowSQL
         run: |
           ~/bin/snowsql -q 'put file://'$(pwd)'/storedproc.py @~/${{ github.ref_name }} overwrite=true' -o friendly=false
       - name: Create or update storedproc
         run: |
-          ~/bin/snowsql -q 'CREATE SESSION POLICY session_policy_prod_1
-                            SESSION_IDLE_TIMEOUT_MINS = 60
-							SESSION_UI_IDLE_TIMEOUT_MINS = 30
-							COMMENT = 'session policy for use in the prod_1 environment';' -o friendly=false
+          ~/bin/snowsql -q 'CREATE SESSION POLICY session_policy_prod_1 SESSION_IDLE_TIMEOUT_MINS = 60 SESSION_UI_IDLE_TIMEOUT_MINS = 30;' -o friendly=false
