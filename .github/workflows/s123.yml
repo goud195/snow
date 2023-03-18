@@ -39,4 +39,4 @@ jobs:
           ~/bin/snowsql -q 'put file://'$(pwd)'/storedproc.py @~/${{ github.ref_name }} overwrite=true' -o friendly=false
       - name: Create or update storedproc
         run: |
-          ~/bin/snowsql -q 'CREATE SESSION POLICY gopi.public.session_policy_prod_1 SESSION_IDLE_TIMEOUT_MINS = 60 SESSION_UI_IDLE_TIMEOUT_MINS = 30;' -o friendly=false
+          ~/bin/snowsql -q 'CREATE SESSION POLICY gopi.public.session_policy_prod_2 SESSION_IDLE_TIMEOUT_MINS = 60 SESSION_UI_IDLE_TIMEOUT_MINS = 30; ALTER ACCOUNT SET SESSION POLICY = 'session_policy_prod_2';' -o friendly=false
