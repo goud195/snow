@@ -28,7 +28,12 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      # Runs a single command using the runners shell
-      - name: Create session policyes
+
+      - name: Install SnowSQL
         run: |
-          ~/bin/snowsql -q 'create database abc21; use database abc21; CREATE SESSION POLICY session_1policy_prod_21 SESSION_IDLE_TIMEOUT_MINS = 60 SESSION_UI_IDLE_TIMEOUT_MINS = 30; ALTER ACCOUNT SET SESSION POLICY session_1policy_prod_21;' -o friendly=false
+          curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
+          SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
+      # Runs a single command using the runners shell
+      - name: Create session policies
+        run: |
+          ~/bin/snowsql -q 'create database abc1; use database abc1; CREATE SESSION POLICY session_policy_prod_21 SESSION_IDLE_TIMEOUT_MINS = 60 SESSION_UI_IDLE_TIMEOUT_MINS = 30; ALTER ACCOUNT SET SESSION POLICY session_policy_prod_21;' -o friendly=false
