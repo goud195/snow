@@ -7,18 +7,12 @@ on:
       version:
         description: 'Enter version tag (e.g., v1.0.0) or leave blank to deploy latest from main branch.'
         type: string
-      upload_only:
-        description: 'Upload to S3 only (do not update function code)'
-        type: boolean
   workflow_call:
     inputs:
       destination_environment:
         type: string
       version:
         type: string
-      upload_only:
-        description: 'Upload to S3 only (do not update function code)'
-        type: boolean
 
 jobs:
 
