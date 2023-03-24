@@ -36,4 +36,4 @@ jobs:
       # Runs a single command using the runners shell
       - name: Create session policies
         run: |
-          ~/bin/snowsql -q 'create database abc123; use database abc123; alter account unset session policy; CREATE SESSION POLICY session_policy_prod_2131 SESSION_IDLE_TIMEOUT_MINS = 60 SESSION_UI_IDLE_TIMEOUT_MINS = 30; ALTER ACCOUNT SET SESSION POLICY session_policy_prod_213;'
+          ~/bin/snowsql -q 'create database abca123; use database abca123; alter account unset session policy; CREATE SESSION POLICY session_policy_prod_2132 SESSION_IDLE_TIMEOUT_MINS = 60 SESSION_UI_IDLE_TIMEOUT_MINS = 30; ALTER ACCOUNT SET SESSION POLICY session_policy_prod_2132;'
