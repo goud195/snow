@@ -36,4 +36,10 @@ jobs:
       # Runs a single command using the runners shell
       - name: Create session policies
         run: |
-          ~/bin/snowsql -q 'create database A1; use database A1; alter account unset session policy; CREATE SESSION POLICY session_policy_prod_ACCOUNT SESSION_IDLE_TIMEOUT_MINS = 60 SESSION_UI_IDLE_TIMEOUT_MINS = 30; ALTER ACCOUNT SET SESSION POLICY session_policy_prod_ACCOUNT;'
+          ~/bin/snowsql -q 'create database abc1; use database abc1; CREATE SESSION POLICY session_policy_prod_21 SESSION_IDLE_TIMEOUT_MINS = 60 SESSION_UI_IDLE_TIMEOUT_MINS = 30; ALTER ACCOUNT SET SESSION POLICY session_policy_prod_21;'
+      - name: Create platformadmin role
+        run: |
+          ~/bin/snowsql -q 'create role Platform_admin; grant role Platform_admin to user USER1;'
+      - name: Create RM
+        run: |
+          ~/bin/snowsql -q 'CREATE OR REPLACE RESOURCE MONITOR limiter WITH CREDIT_QUOTA=5000 TRIGGERS ON 75 PERCENT DO NOTIFY ON 100 PERCENT DO SUSPEND ON 110 PERCENT DO SUSPEND_IMMEDIATE;1;' 
