@@ -20,10 +20,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      SNOWSQL_PWD: ${{ secrets.SNOWFLAKE_PASSWORD }}
       SNOWSQL_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
-      SNOWSQL_USER: ${{ secrets.SNOWFLAKE_USERNAME }}
-      SNOWSQL_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
