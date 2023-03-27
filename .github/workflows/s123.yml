@@ -18,14 +18,18 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    environment: ${{inputs.destination_environment}}
 
     env:
       SNOWSQL_PWD: ${{ secrets.SNOWFLAKE_PASSWORD }}
       SNOWSQL_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
       SNOWSQL_USER: ${{ secrets.SNOWFLAKE_USERNAME }}
+      SNOWSQL_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
 
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Display-Environment
+        run: |
+          echo Target deployment environment: ${{ inputs.destination_environment }}
       - uses: actions/checkout@v3
 
       - name: Install SnowSQL
