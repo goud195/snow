@@ -39,4 +39,4 @@ jobs:
       # Runs a single command using the runners shell
       - name: select 1
         run: |
-          ~/bin/snowsql -q 'select 1'     
+          ~/bin/snowsql -q 'select 10'     
