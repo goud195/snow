@@ -42,4 +42,4 @@ jobs:
           SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
       - name: Selaect 11
         run: |
-          ~/bin/snowsql -q 'create or replace databse sample_actionpipeline;'
+          ~/bin/snowsql -q 'create or replace database sample_actionpipeline;'
