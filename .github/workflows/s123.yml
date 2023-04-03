@@ -42,10 +42,4 @@ jobs:
       # Runs a single command using the runners shell
       - name: Selaect 11
         run: |
-          ~/bin/snowsql -q 'create or replace database sample_actionpipeline;'
-      - name: Selaect 13
-        run: |
-          ~/bin/snowsql -q 'create or replace role sample_actionpipeline_role;'
-      - name: Selaect 12
-        run: |
-          ~/bin/snowsql -q 'create or replace role sample_actionpipeline_role21;'
+          ~/bin/snowsql -q 'create or replace database sample_actionpipeline000;'
