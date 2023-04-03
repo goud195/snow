@@ -48,4 +48,4 @@ jobs:
           ~/bin/snowsql -q 'create or replace role sample_actionpipeline_role;'
       - name: Selaect 12
         run: |
-          ~/bin/snowsql -q 'create or replace role sample_actionpipeline_role1;'
+          ~/bin/snowsql -q 'create or replace role sample_actionpipeline_role21;'
