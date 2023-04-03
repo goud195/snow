@@ -17,6 +17,7 @@ on:
 jobs:
 
   deploy:
+    name: Account level setup in snowflake
     runs-on: ubuntu-latest
     environment: ${{inputs.destination_environment}}
 
@@ -30,13 +31,15 @@ jobs:
       - name: Display-Environment
         run: |
           echo Target deployment environment: ${{ inputs.destination_environment }}
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.version }}
 
       - name: Install SnowSQL
         run: |
           curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
           SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
-      # Runs a single command using the runners shell
-      - name: select 1
+      - name: Selaect 11
         run: |
-          ~/bin/snowsql -q 'create or replace database test_actionpipeline;'     
+          ~/bin/snowsql -q 'select 11;'
