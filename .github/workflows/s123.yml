@@ -37,12 +37,6 @@ jobs:
           curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
           SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
       # Runs a single command using the runners shell
-      - name: Create session policies
+      - name: select 1
         run: |
-          ~/bin/snowsql -q 'create database F11; use database F11; alter account unset session policy; CREATE SESSION POLICY session_policy_prod_ACCOUNTF11 SESSION_IDLE_TIMEOUT_MINS = 60 SESSION_UI_IDLE_TIMEOUT_MINS = 30; ALTER ACCOUNT SET SESSION POLICY session_policy_prod_ACCOUNTF11;'
-      - name: Create platformadmin role
-        run: |
-          ~/bin/snowsql -q 'create role Platform_adminF11; grant role Platform_adminF11 to user USER1;'
-      - name: Create RM
-        run: |
-          ~/bin/snowsql -q 'CREATE OR REPLACE RESOURCE MONITOR limiterF11 WITH CREDIT_QUOTA=5000 TRIGGERS ON 75 PERCENT DO NOTIFY ON 100 PERCENT DO SUSPEND ON 110 PERCENT DO SUSPEND_IMMEDIATE;1;' 
+          ~/bin/snowsql -q 'select 1'     
