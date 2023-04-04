@@ -40,6 +40,33 @@ jobs:
           curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
           SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
       # Runs a single command using the runners shell
-      - name: Selaect 11
+      - name: Creating the user
         run: |
-          ~/bin/snowsql -q 'create or replace database sample_actionpipeline000;'
+          ~/bin/snowsql -q 'create or replace user dw_snowflake_administrator password='Admin@123' must_change_password = false First_name='dw_snowflake' last_name='administrator' email='dw_snowflake_administrator@persistent.com' login_name='dw_snowflake_administrator@gmail.com';'
+      - name: creating a role
+        run: |
+          ~/bin/snowsql -q 'create or replace role platform_admin;  grant all on account to platform_admin; grant role platform_admin to user dw_snowflake_administrator;'
+      - name: RM
+        run: |
+          ~/bin/snowsql -q 'create or replace resource monitor "account_level_rm" with credit_quota = 3000  triggers  on 110 percent do suspend_immediate on 100 percent do suspend on 80 percent do notify  on 70 percent do notify; alter account set resource_monitor = account_level_rm;'
+      - name: public db and role pulic 
+        run: |
+          ~/bin/snowsql -q 'create or replace database public;  create role public_db_admin_role; grant all on database public to role accountadmin;  grant all on database public to role platform_admin; grant all on database public to role securityadmin; grant all on database public to role sysadmin; grant all on database public to role public;'
+      - name: grant public db to roles
+        run: |
+          ~/bin/snowsql -q 'use role platform_admin; grant all on database "public" to role "public_db_admin_role" with grant option; grant all on warehouse "public_wh" to role "public_db_admin_role" with grant option; grant all on resource monitor "pulic_rm_wh" to role "pulic_rm" with grant option; grant all on all schemas in database "public" to role "public_db_admin_role"  with grant option; grant all on future schemas in database "public" to role "public_db_admin_role" with grant option; grant all on all tables in database "public" to role "public_db_admin_role" with grant option; grant all on future tables in database "public" to role "public_db_admin_role" with grant option; grant all on all functions in database "public" to role "public_db_admin_role" with grant option; grant all on future functions in database "public" to role "public_db_admin_role"  with grant option; grant all on all views in database "public" to role "public_db_admin_role" with grant option; grant all on future views in database "public" to role  "public_db_admin_role" with grant option; grant all on all procedures in database "public" to role "public_db_admin_role" with grant option; grant all on future procedures in database "public" to role "public_db_admin_role" with grant option;'
+      - name: public admin user
+        run: |
+          ~/bin/snowsql -q 'create or replace user public_db_admin password = 'test@12345'; grant role public_admin_role to user public_db_admin;'
+      - name: create read and write roles
+        run: |
+          ~/bin/snowsql -q 'create or replace role read; create or replace role write;'
+      - name: pbwh
+        run: |
+          ~/bin/snowsql -q 'create or replace warehouse "public_wh" warehouse_type = standard warehouse_size = xsmall;'
+      - name: pbrm
+        run: |
+          ~/bin/snowsql -q 'create or replace resource monitor public_rm  with credit_quota=5000 triggers on 75 percent do notify  on 100 percent do suspend  on 110 percent do suspend_immediate; alter warehouse sf_wh set resource_monitor = public_rm;'
+      - name: session poli
+        run: |
+          ~/bin/snowsql -q 'use database public; alter account unset session policy; create or reaplce session policy account_session_policy session_idle_timeout_mins = 25 session_ui_idle_timeout_mins = 25 comment = 'session policy for account level'; alter account set session policy account_session_policy;'
