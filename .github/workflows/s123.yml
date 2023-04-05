@@ -26,6 +26,7 @@ jobs:
       SNOWSQL_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
       SNOWSQL_USER: ${{ secrets.SNOWFLAKE_USERNAME }}
       SNOWSQL_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+      SNOWSQL_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
 
     steps:
       - name: Display-Environment
