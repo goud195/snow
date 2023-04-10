@@ -43,5 +43,5 @@ jobs:
           SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
       - name: Selaect 11
         run: |
-          ~/bin/snowsql -q 'create or replace role mass; '
+          aws ssm get-parameter --name /snowflake/user --query 'Parameter.Value' --output text
       
