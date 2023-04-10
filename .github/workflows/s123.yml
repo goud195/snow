@@ -45,7 +45,7 @@ jobs:
 
       - name: taking credential
         run: |
-          aws ssm get-parameter --name /snowflake/user --query 'Parameter.Value' --output text
+          aws ssm get-parameter --name /snowflake/user --query 'Parameter.Value' --region us-east-1 --output text
 
       - name: Install SnowSQL
         run: |
