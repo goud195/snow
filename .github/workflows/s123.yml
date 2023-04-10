@@ -12,33 +12,34 @@ on:
       - "v*"
 
   # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:jobs:
+  workflow_dispatch:
+
+jobs:
 
   deploy:
-    name: Account level setup in snowflake
     runs-on: ubuntu-latest
-    environment: ${{inputs.destination_environment}}
 
     env:
       SNOWSQL_PWD: ${{ secrets.SNOWFLAKE_PASSWORD }}
       SNOWSQL_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
       SNOWSQL_USER: ${{ secrets.SNOWFLAKE_USERNAME }}
       SNOWSQL_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
-      SNOWSQL_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
 
     steps:
-      - name: Display-Environment
-        run: |
-          echo Target deployment environment: ${{ inputs.destination_environment }}
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ inputs.version }}
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
 
       - name: Install SnowSQL
         run: |
           curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
           SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
-      - name: Selaect 11
+      # Runs a single command using the runners shell
+      - name: Create session policies
         run: |
-          ~/bin/snowsql -q 'create or replace role mass; '
+          ~/bin/snowsql -q 'create database F1; use database F1; alter account unset session policy; CREATE SESSION POLICY session_policy_prod_ACCOUNTF1 SESSION_IDLE_TIMEOUT_MINS = 60 SESSION_UI_IDLE_TIMEOUT_MINS = 30; ALTER ACCOUNT SET SESSION POLICY session_policy_prod_ACCOUNTF1;'
+      - name: Create platformadmin role
+        run: |
+          ~/bin/snowsql -q 'create role Platform_adminF1; grant role Platform_adminF1 to user USER1;'
+      - name: Create RM
+        run: |
+          ~/bin/snowsql -q 'CREATE OR REPLACE RESOURCE MONITOR limiterF1 WITH CREDIT_QUOTA=5000 TRIGGERS ON 75 PERCENT DO NOTIFY ON 100 PERCENT DO SUSPEND ON 110 PERCENT DO SUSPEND_IMMEDIATE;1;' 
