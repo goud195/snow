@@ -26,7 +26,6 @@ jobs:
       SNOWSQL_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
       SNOWSQL_USER: ${{ secrets.SNOWFLAKE_USERNAME }}
       SNOWSQL_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
-      SNOWSQL_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
 
     steps:
       - name: Display-Environment
@@ -37,6 +36,13 @@ jobs:
         with:
           ref: ${{ inputs.version }}
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
       - name: Install SnowSQL
         run: |
           curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
@@ -44,4 +50,3 @@ jobs:
       - name: Selaect 11
         run: |
           aws ssm get-parameter --name /snowflake/user --query 'Parameter.Value' --output text
-      
