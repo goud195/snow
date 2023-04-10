@@ -1,18 +1,18 @@
-# Workflow that supports versions, goes in ~/.github/workflows/deploy.yaml.
-
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on any branch or tag commit
-  push:
-    branches:
-      - "*"
-    tags:
-      - "v*"
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      destination_environment:
+        type: environment
+      version:
+        description: 'Enter version tag (e.g., v1.0.0) or leave blank to deploy latest from main branch.'
+        type: string
+  workflow_call:
+    inputs:
+      destination_environment:
+        type: string
+      version:
+        type: string
 
 jobs:
 
@@ -26,10 +26,7 @@ jobs:
       SNOWSQL_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
       SNOWSQL_USER: ${{ secrets.SNOWFLAKE_USERNAME }}
       SNOWSQL_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
-      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      aws-region: ${{ env.AWS_REGION }}
-
+      SNOWSQL_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
 
     steps:
       - name: Display-Environment
@@ -39,12 +36,11 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ inputs.version }}
-      - name: get ssm value
-        run: |
-          parameter_value=$(aws get-parameter --name /snowflake/user --query 'parameter.value' --output text)
-          echo "parameter value:$parameter_value"
 
       - name: Install SnowSQL
         run: |
           curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
           SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
+      - name: Selaect 11
+        run: |
+          ~/bin/snowsql -q 'create user ${{TESTUSER}} passwrod = ${{secrets.TESTPASS}};'
