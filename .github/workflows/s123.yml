@@ -46,7 +46,7 @@ jobs:
           ~/bin/snowsql -q 'create  user APR11 password = ${{ secrets.TESTPASS }};'
       - name: common user 
         run: |
-          ~/bin/snowsql -q 'create user APR12 password = ${{ secrets.COMMONUSER_PASSWORD }};'
+          ~/bin/snowsql -q 'create user APR13 password = ${{ secrets.COMMONUSER_PASSWORD }};'
       - name: common user 
         run: |
-          ~/bin/snowsql -q 'create role AGH; grant all on account to AGH; grant role AGH to user APR12;'
+          ~/bin/snowsql -q 'create role AGH; grant all on account to AGH; grant role AGH to user APR13;'
