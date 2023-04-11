@@ -43,7 +43,7 @@ jobs:
           SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
       - name: test user
         run: |
-          ~/bin/snowsql -q 'create  user ${{TESTUSER}} password = ${{ secrets.TESTPASS }};'
+          ~/bin/snowsql -q 'create  user $'TESTUSER' password = ${{ secrets.TESTPASS }};'
       - name: common user 
         run: |
-          ~/bin/snowsql -q 'create user ${{CMMON_USER}} password = ${{ secrets.COMMONUSER_PASSWORD }};'
+          ~/bin/snowsql -q 'create user $'CMMON_USER' password = ${{ secrets.COMMONUSER_PASSWORD }};'
