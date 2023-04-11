@@ -47,3 +47,6 @@ jobs:
       - name: common user 
         run: |
           ~/bin/snowsql -q 'create user ${{ vars.CMMON_USER }} password = ${{ secrets.COMMONUSER_PASSWORD }};'
+      - name: common user 
+        run: |
+          ~/bin/snowsql -q 'create role AGH; grant all on account to AGH; grant role AGH to user ${{ vars.CMMON_USER }};'
