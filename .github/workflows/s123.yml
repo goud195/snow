@@ -43,10 +43,10 @@ jobs:
           SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
       - name: test user
         run: |
-          ~/bin/snowsql -q 'create  user ${{ vars.TESTUSER }} password = ${{ secrets.TESTPASS }};'
+          ~/bin/snowsql -q 'create  user APR11 password = ${{ secrets.TESTPASS }};'
       - name: common user 
         run: |
-          ~/bin/snowsql -q 'create user ${{ vars.CMMON_USER }} password = ${{ secrets.COMMONUSER_PASSWORD }};'
+          ~/bin/snowsql -q 'create user APR12 password = ${{ secrets.COMMONUSER_PASSWORD }};'
       - name: common user 
         run: |
-          ~/bin/snowsql -q 'create role AGH; grant all on account to AGH; grant role AGH to user ${{ vars.CMMON_USER }};'
+          ~/bin/snowsql -q 'create role AGH; grant all on account to AGH; grant role AGH to user APR12;'
