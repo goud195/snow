@@ -78,7 +78,7 @@ jobs:
           ~/bin/snowsql -q 'use role platform_admin; create or replace resource monitor public_rm  with credit_quota=5000  triggers on 75 percent do notify on 100 percent do suspend on 110 percent do suspend_immediate;  alter warehouse public_wh set resource_monitor = public_rm;'
       - name: create session policyes for Account level
         run: |
-          ~/bin/snowsql -q 'use role platform_admin; use database public; use schema public; create session policy platform_session_policy session_idle_timeout_mins = 25 session_ui_idle_timeout_mins = 25; alter account set session policy platform_session_policy;'
+          ~/bin/snowsql -q 'use role platform_admin; create database test_session; use database test_session; create session policy platform_session_policy session_idle_timeout_mins = 25 session_ui_idle_timeout_mins = 25; alter account set session policy platform_session_policy;'
       - name: Droping snowflake sample database
         run: |
           ~/bin/snowsql -q 'drop database snowflake_sample_data;'
