@@ -61,6 +61,9 @@ jobs:
       - name: create public warehouse for public database
         run: |
           ~/bin/snowsql -q 'use role platform_admin; create warehouse "public_wh" warehouse_type = standard warehouse_size = xsmall;'
+      - name: create public_db_admin_role and grant that role on database
+        run: |
+          ~/bin/snowsql -q 'create role public_db_admin_role; grant all on database "public" to role "public_db_admin_role" with grant option; grant all on warehouse "public_wh" to role "public_db_admin_role" with grant option; grant all on resource monitor "pulic_rm_wh" to role "pulic_rm" with grant option; grant all on all schemas in database "public" to role "public_db_admin_role"  with grant option; grant all on future schemas in database "public" to role "public_db_admin_role" with grant option; grant all on all tables in database "public" to role "public_db_admin_role" with grant option; grant all on future tables in database "public" to role "public_db_admin_role" with grant option; grant all on all functions in database "public" to role "public_db_admin_role" with grant option; grant all on future functions in database "public" to role "public_db_admin_role"  with grant option; grant all on all views in database "public" to role "public_db_admin_role" with grant option; grant all on future views in database "public" to role  "public_db_admin_role" with grant option; grant all on all procedures in database "public" to role "public_db_admin_role" with grant option; grant all on future procedures in database "public" to role "public_db_admin_role" with grant option;'
       - name: create public_db_admin and grant public_db_admin_role to user
         run: |
           ~/bin/snowsql -q 'use role platform_admin; create user public_db_admin password = ${{ secrets.PUBLIC_DB_PASSWORD }}; grant role public_db_admin_role to user public_db_admin;'
