@@ -51,4 +51,7 @@ jobs:
           ~/bin/snowsql -q 'create role platform_admin;  grant all on account to platform_admin; grant role platform_admin to user dw_sf_admin; grant role platform_admin to user goud195;'
       - name: create  Warehouse
         run: |
-          ~/bin/snowsql -q 'use role platform_admin; create warehouse "platform_wh12" warehouse_type = standard warehouse_size = xsmall;'
+          ~/bin/snowsql -q 'use role platform_admin; create warehouse "platform_wh" warehouse_type = standard warehouse_size = xsmall;'
+      - name: create Resource Monitoring
+        run: |
+          ~/bin/snowsql -q 'use role platform_admin; create resource monitor "platform_rm" with credit_quota = 3000  triggers  on 110 percent do suspend_immediate  on 100 percent do suspend  on 80 percent do notify  on 70 percent do notify; alter account set resource_monitor = platform_rm;'
