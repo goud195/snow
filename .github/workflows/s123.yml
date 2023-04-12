@@ -1,18 +1,18 @@
+# Workflow that supports versions, goes in ~/.github/workflows/deploy.yaml.
+
+name: CI
+
+# Controls when the workflow will run
 on:
+  # Triggers the workflow on any branch or tag commit
+  push:
+    branches:
+      - "*"
+    tags:
+      - "v*"
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-    inputs:
-      destination_environment:
-        type: environment
-      version:
-        description: 'Enter version tag (e.g., v1.0.0) or leave blank to deploy latest from main branch.'
-        type: string
-  workflow_call:
-    inputs:
-      destination_environment:
-        type: string
-      version:
-        type: string
 
 jobs:
 
@@ -44,3 +44,8 @@ jobs:
       - name: create a common user
         run: |
           ~/bin/snowsql -q 'create user dw_sf_admin password = ${{ secrets.COMMONUSER_PASSWORD }} must_change_password = false; alter user dw_sf_admin set default_warehouse = 'compute_wh';'
+
+      - name: create platform_admin Role
+        run: |
+          ~/bin/snowsql -q 'create role platform_admin;  grant all on account to platform_admin; grant role platform_admin to user dw_sf_admin; grant role platform_admin to user goud195'
+      - name: create  Warehouse
