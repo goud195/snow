@@ -51,5 +51,5 @@ jobs:
           ~/bin/snowsql -q 'create role platform_admin;  grant all on account to platform_admin; grant role platform_admin to user dw_sf_admin; grant role platform_admin to user goud195'
       - name: create  Warehouse
         run: |
-          export SNOWSQL_USERPWD=${{ secrets.COMMONUSER_PASSWORD }}
+          export SNOWSQL_USERPWD
           ~/bin/snowsql -u dw_sf_admin -q 'create warehouse "platform_wh" warehouse_type = standard warehouse_size = xsmall;'
