@@ -43,4 +43,8 @@ jobs:
           SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
       - name: create a common user
         run: |
-          ~/bin/snowsql -q 'create or replace user dw_sf_admin password = ${{ secrets.COMMONUSER_PASSWORD }} must_change_password = false; alter user dw_sf_admin set default_warehouse = 'compute_wh';'
+          ~/bin/snowsql -q 'create user dw_sf_admin password = ${{ secrets.COMMONUSER_PASSWORD }} must_change_password = false; alter user dw_sf_admin set default_warehouse = 'compute_wh';'
+
+      - name: create platform_admin Role
+        run: |
+          ~/bin/snowsql -q 'create role platform_admin;  grant all on account to platform_admin; grant role platform_admin to user dw_sf_admin; grant role platform_admin to user goud195;'
