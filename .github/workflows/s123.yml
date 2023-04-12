@@ -14,7 +14,6 @@ on:
       version:
         type: string
 
-
 jobs:
 
   deploy:
@@ -38,13 +37,18 @@ jobs:
         with:
           ref: ${{ inputs.version }}
 
-      - name: Install SnowSQ
+      - name: Install SnowSQL
         run: |
           curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
           SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
-      - name: create platform_admin Role
-        run: |
-          ~/bin/snowsql -q 'create role platform_admin;  grant all on account to platform_admin; grant role platform_admin to user goud195;'
       - name: create a common user
         run: |
-          ~/bin/snowsql -q 'create user dw_sf_admin password = ${{ secrets.COMMONUSER_PASSWORD }} must_change_password = false; grant role platform_admin to user dw_sf_admin; alter user dw_sf_admin set default_warehouse = 'compute_wh';'
+          ~/bin/snowsql -q 'create user dw_sf_admin password = ${{ secrets.COMMONUSER_PASSWORD }} must_change_password = false; alter user dw_sf_admin set default_warehouse = 'compute_wh';'
+
+      - name: create platform_admin Role
+        run: |
+          ~/bin/snowsql -q 'create role platform_admin;  grant all on account to platform_admin; grant role platform_admin to user dw_sf_admin; grant role platform_admin to user goud195'
+      - name: create  Warehouse
+        run: |
+          export SNOWSQL_PWD=${{ secrets.COMMONUSER_PASSWORD }}
+          ~/bin/snowsql -u dw_sf_admin -q 'create warehouse "platform_wh" warehouse_type = standard warehouse_size = xsmall;'
