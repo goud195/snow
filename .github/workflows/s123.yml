@@ -60,7 +60,7 @@ jobs:
           ~/bin/snowsql -q 'use role platform_admin; create database public; grant all on database public to role accountadmin; grant all on database public to role platform_admin; grant all on database public to role securityadmin; grant all on database public to role sysadmin; grant all on database public to role public;'
       - name: create or replace public warehouse for public database
         run: |
-          ~/bin/snowsql -q 'use role platform_admin; create or replace warehouse public_wh warehouse_type = standard warehouse_size = xsmall;'
+          ~/bin/snowsql -q 'use role platform_admin; create or replace warehouse public_wh warehouse_type = standard warehouse_size = xsmall; grant all on warehouse public_wh to role accountadmin;'
       - name: create public resource monitoring & attach public resource monitor to public warehouse level
         run: |
           ~/bin/snowsql -q 'use role platform_admin; create or replace resource monitor public_rm  with credit_quota=5000  triggers on 75 percent do notify on 100 percent do suspend on 110 percent do suspend_immediate;  alter warehouse public_wh set resource_monitor = public_rm;'
@@ -78,7 +78,7 @@ jobs:
           ~/bin/snowsql -q 'use role platform_admin; create role public_db_write; grant all on database public to role public_db_write with grant option; grant usage,operate on warehouse public_wh to role public_db_write with grant option; grant all on all schemas in database public to role public_db_write  with grant option; grant all on future schemas in database public to role public_db_write with grant option; grant all on all tables in database public to role public_db_write with grant option; grant all on future tables in database public to role public_db_write with grant option; grant all on all functions in database public to role public_db_write with grant option; grant all on future functions in database public to role public_db_write  with grant option; grant all on all views in database public to role public_db_write with grant option; grant all on future views in database public to role  public_db_write with grant option;'
       - name: create session policyes for Account level
         run: |
-          ~/bin/snowsql -q 'use role platform_admin; use database public; use schema public; create session policy platform_session_policy session_idle_timeout_mins = 25 session_ui_idle_timeout_mins = 25; alter account set session policy platform_session_policy;'
+          ~/bin/snowsql -q 'use role platform_admin; use database te90; use schema te90; create session policy platform_session_policy session_idle_timeout_mins = 25 session_ui_idle_timeout_mins = 25; alter account set session policy platform_session_policy;'
       - name: Droping snowflake sample database
         run: |
           ~/bin/snowsql -q 'drop database snowflake_sample_data;'
